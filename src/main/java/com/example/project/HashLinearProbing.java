@@ -4,28 +4,31 @@ import java.util.Random;
 
 public class HashLinearProbing {
     private int hsize; // tamano de la tabla hash
-    private Integer[] buckets; // array que representa la tabla hash
-    private Integer AVAILABLE;
+    private Persona[] buckets; // array que representa la tabla hash
+    private String AVAILABLE;
     private int size; // cantidad de elementos en la tabla hash
 
     public HashLinearProbing(int hsize) {
-        this.buckets = new Integer[hsize];
+        this.buckets = new Persona[hsize];
         this.hsize = hsize;
-        this.AVAILABLE = Integer.MIN_VALUE;
+        this.AVAILABLE = Integer.MIN_VALUE+"";
         this.size = 0;
     }
 
-    public int hashing(int key) {
-        int hash = key % hsize;
-        if (hash < 0) {
-            hash += hsize;
-        }
-        return hash;
+    public int hashing(String dni) {
+    	 int suma = 0;
+         for(char c: dni.toCharArray()){
+             suma += Integer.parseInt(Character.toString(c));
+         }
+         int hash = (suma) % hsize;
+         if (hash < 0) {
+             hash += hsize;
+         }
+         return hash;
     }
 
-    public void insertHash(int key) {
-        Integer wrappedInt = key;
-        int hash = hashing(key);
+    public void insertHash(Persona p) {
+    	int hash = hashing(p.DNI);
 
         if (isFull()) {
             System.out.println("Tabla hash esta llena!");
@@ -33,8 +36,8 @@ public class HashLinearProbing {
         }
 
         for (int i = 0; i < hsize; i++) {
-            if (buckets[hash] == null || buckets[hash] == AVAILABLE) {
-                buckets[hash] = wrappedInt;
+            if (buckets[hash] == null || buckets[hash].DNI.equals(AVAILABLE)) {
+                buckets[hash] = p;
                 size++;
                 return;
             }
@@ -47,8 +50,7 @@ public class HashLinearProbing {
         }
     }
 
-    public void deleteHash(int key) {
-        Integer wrappedInt = key;
+    public void deleteHash(String key) {
         int hash = hashing(key);
 
         if (isEmpty()) {
@@ -57,8 +59,8 @@ public class HashLinearProbing {
         }
 
         for (int i = 0; i < hsize; i++) {
-            if (buckets[hash] != null && buckets[hash].equals(wrappedInt)) {
-                buckets[hash] = AVAILABLE;
+            if (buckets[hash] != null && buckets[hash].DNI.equals(key)) {
+                buckets[hash].DNI = AVAILABLE;
                 size--;
                 return;
             }
@@ -74,7 +76,7 @@ public class HashLinearProbing {
 
     public void displayHashtable() {
         for (int i = 0; i < hsize; i++) {
-            if (buckets[i] == null || buckets[i] == AVAILABLE) {
+            if (buckets[i] == null || buckets[i].DNI.equals(AVAILABLE)) {
                 System.out.println("Celda " + i + ": Vacia");
             } else {
                 System.out.println("Celda " + i + ": " + buckets[i].toString());
@@ -82,20 +84,19 @@ public class HashLinearProbing {
         }
     }
 
-    public int findHash(int key) {
-        Integer wrappedInt = key;
-        int hash = hashing(key);
-
+    public String findHash(String key) {
+    	int hash = hashing(key);
+    	
         if (isEmpty()) {
             System.out.println("Tabla hash esta vacia!");
-            return -1;
+            return null;
         }
 
         for (int i = 0; i < hsize; i++) {
             try {
-                if (buckets[hash].equals(wrappedInt)) {
-                    buckets[hash] = AVAILABLE;
-                    return hash;
+                if (buckets[hash].equals(key)) {
+                    buckets[hash].DNI = AVAILABLE;
+                    return buckets[hash].nombre;
                 }
             } catch (Exception E) {
             }
@@ -107,7 +108,7 @@ public class HashLinearProbing {
             }
         }
         System.out.println("Clave " + key + " no encontrada!");
-        return -1;
+        return null;
     }    
    
     public boolean isFull() {        
@@ -125,7 +126,7 @@ public class HashLinearProbing {
         return response;
     }
 
-    public static void main (String[] args){
+   /* public static void main (String[] args){
         HashLinearProbing tb = new HashLinearProbing(10);
 
         Random rd = new Random();
@@ -135,5 +136,5 @@ public class HashLinearProbing {
         }
 
         tb.displayHashtable();        
-    }
+    }*/
 }
