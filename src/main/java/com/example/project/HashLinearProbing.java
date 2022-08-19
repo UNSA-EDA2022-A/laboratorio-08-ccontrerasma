@@ -12,7 +12,7 @@ public class HashLinearProbing {
     public HashLinearProbing(int hsize) {
         this.buckets = new Persona[hsize];
         this.hsize = hsize;
-        this.AVAILABLE = "";
+        this.AVAILABLE = Integer.MIN_VALUE+"";
         this.size = 0;
     }
 
@@ -58,7 +58,7 @@ public class HashLinearProbing {
         }
 
         for (int i = 0; i < hsize; i++) {
-            if (buckets[hash] != null && buckets[hash].equals(wrappedInt)) {
+            if (buckets[hash] != null && buckets[hash].DNI.equals(wrappedInt)) {
                 buckets[hash].DNI = AVAILABLE;
                 size--;
                 return;
@@ -138,3 +138,4 @@ public class HashLinearProbing {
         tb.displayHashtable();        
     }*/
 }
+
